@@ -1,5 +1,4 @@
-using System.Runtime.CompilerServices;
-using UnityEditor.ShaderGraph.Internal;
+using System;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -7,12 +6,39 @@ public class Player : MonoBehaviour
     [SerializeField] private float moveSpeed = 7f;
     [SerializeField] private float rotationSpeed = 10f;
     [SerializeField] private GameInput gameInput;
+    [SerializeField] private LayerMask counterLayerMask;
     private Vector3 lastInteractDirection;
     private bool isWalking = false;
+
+    private void Start()
+    {
+        gameInput.OnInteractAction += GameInput_OnInteractionAction;
+    }
+
+    private void GameInput_OnInteractionAction(object sender, EventArgs e)
+    {
+        Vector2 inputVector = gameInput.PlayerMovementInputNormalized();
+        Vector3 moveDir = new Vector3(inputVector.x, 0f, inputVector.y);
+
+        if (moveDir != Vector3.zero)
+        {
+            lastInteractDirection = moveDir;
+        }
+
+        float interactDistance = 2f;
+        if (Physics.Raycast(transform.position, lastInteractDirection, out RaycastHit hit, interactDistance, counterLayerMask))
+        {
+            if (hit.transform.TryGetComponent(out ClearCounter clearCounter))
+            {
+                clearCounter.Interact();
+            }
+        }
+    }
+
     private void Update()
     {
         HandleMovement();
-        HandleInteraction();
+        // HandleInteraction();
     }
 
     private void HandleInteraction()
@@ -26,9 +52,12 @@ public class Player : MonoBehaviour
         }
 
         float interactDistance = 2f;
-        if (Physics.Raycast(transform.position, lastInteractDirection, out RaycastHit hit, interactDistance))
+        if (Physics.Raycast(transform.position, lastInteractDirection, out RaycastHit hit, interactDistance, counterLayerMask))
         {
-            Debug.Log(hit.transform.name);
+            if (hit.transform.TryGetComponent(out ClearCounter clearCounter))
+            {
+                // clearCounter.Interact();
+            }
         }
     }
 
