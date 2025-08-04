@@ -1,4 +1,5 @@
 using System.Runtime.CompilerServices;
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -6,8 +7,32 @@ public class Player : MonoBehaviour
     [SerializeField] private float moveSpeed = 7f;
     [SerializeField] private float rotationSpeed = 10f;
     [SerializeField] private GameInput gameInput;
+    private Vector3 lastInteractDirection;
     private bool isWalking = false;
     private void Update()
+    {
+        HandleMovement();
+        HandleInteraction();
+    }
+
+    private void HandleInteraction()
+    {
+        Vector2 inputVector = gameInput.PlayerMovementInputNormalized();
+        Vector3 moveDir = new Vector3(inputVector.x, 0f, inputVector.y);
+
+        if (moveDir != Vector3.zero)
+        {
+            lastInteractDirection = moveDir;
+        }
+
+        float interactDistance = 2f;
+        if (Physics.Raycast(transform.position, lastInteractDirection, out RaycastHit hit, interactDistance))
+        {
+            Debug.Log(hit.transform.name);
+        }
+    }
+
+    private void HandleMovement()
     {
         Vector2 inputVector = gameInput.PlayerMovementInputNormalized();
         Vector3 moveDir = new Vector3(inputVector.x, 0f, inputVector.y);
