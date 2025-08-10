@@ -1,7 +1,7 @@
 using UnityEngine;
 public class CuttingCounter : BaseCounter
 {
-    [SerializeField] private KitchenObjectsSO cutKitchenObjectSO;
+    [SerializeField] private CuttingRecipeSO[] cutKitchenObjectSOArray;
 
     public override void Interact(Player player)
     {
@@ -10,7 +10,10 @@ public class CuttingCounter : BaseCounter
             // It does not have kitchen object
             if (player.HasKitchenObject())
             {
-                player.GetKitchenObject().SetKitchenObjectParent(this);
+                if (HasRecipeWithInput(player.GetKitchenObject().GetKitchenObjectsSO()))
+                {
+                    player.GetKitchenObject().SetKitchenObjectParent(this);
+                }
             }
             else
             {
@@ -33,10 +36,37 @@ public class CuttingCounter : BaseCounter
 
     public override void InteractAlternate(Player player)
     {
-        if (HasKitchenObject())
+        if (HasKitchenObject() && HasRecipeWithInput(GetKitchenObject().GetKitchenObjectsSO()))
         {
+            KitchenObjectsSO outputKitchenObject = GetOutputSlice(GetKitchenObject().GetKitchenObjectsSO());
             GetKitchenObject().DestroySelf();
-            KitchenObject.SpawnKitchenObjects(cutKitchenObjectSO, this);
+            KitchenObject.SpawnKitchenObjects(outputKitchenObject, this);
         }
+    }
+
+    private KitchenObjectsSO GetOutputSlice(KitchenObjectsSO kitchenObjectsSO)
+    {
+        foreach (CuttingRecipeSO cutKitchenObjectSO in cutKitchenObjectSOArray)
+        {
+            if (cutKitchenObjectSO.input == kitchenObjectsSO)
+            {
+                return cutKitchenObjectSO.output;
+            }
+        }
+
+        return null;
+    }
+
+    private bool HasRecipeWithInput(KitchenObjectsSO kitchenObjectsSO)
+    {
+        foreach (CuttingRecipeSO cutKitchenObjectSO in cutKitchenObjectSOArray)
+        {
+            if (cutKitchenObjectSO.input == kitchenObjectsSO)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
