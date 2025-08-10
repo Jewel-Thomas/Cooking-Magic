@@ -6,7 +6,12 @@ public class BaseCounter : MonoBehaviour, IKitchenObjectParent
     private KitchenObject kitchenObject;
     public virtual void Interact(Player player)
     {
-        Debug.LogError("Illegal BaseCounter Interact called!");
+        Debug.LogError("Illegal BaseCounter Interact() called!");
+    }
+
+    public virtual void InteractAlternate(Player player)
+    {
+        Debug.LogError("Illegal BaseCounter InteractAlternate() called!");
     }
 
     public Transform GetKitchenOjectFollowTransform()
