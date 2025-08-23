@@ -1,10 +1,14 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Pool;
 
 public class PlateKitchenObject : KitchenObject
 {
+    public event EventHandler<OnIngredientAddedEventArgs> OnIngredientAdded;
+    public class OnIngredientAddedEventArgs : EventArgs
+    {
+        public KitchenObjectsSO kitchenObjectsSO;
+    }
     private List<KitchenObjectsSO> ingredientList;
     [SerializeField] private List<KitchenObjectsSO> validIngredients;
 
@@ -20,13 +24,17 @@ public class PlateKitchenObject : KitchenObject
             return false;
         }
         if (ingredientList.Contains(kitchenObjectsSO))
+        {
+            return false;
+        }
+        else
+        {
+            ingredientList.Add(kitchenObjectsSO);
+            OnIngredientAdded?.Invoke(this, new OnIngredientAddedEventArgs
             {
-                return false;
-            }
-            else
-            {
-                ingredientList.Add(kitchenObjectsSO);
-                return true;
-            }
+                kitchenObjectsSO = kitchenObjectsSO
+            });
+            return true;
+        }
     }
 }
