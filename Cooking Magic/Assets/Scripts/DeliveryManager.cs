@@ -1,9 +1,12 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class DeliveryManager : MonoBehaviour
 {
+    public event EventHandler OnRecipeSpawned;
+    public event EventHandler OnRecipeCompleted;
     public static DeliveryManager Instance { get; private set; }
     [SerializeField] private RecipeListSO recipeListSO;
     private List<RecipeSO> waitingRecipeList;
@@ -24,11 +27,12 @@ public class DeliveryManager : MonoBehaviour
         {
             recipeListTimer = recipeListTimerMax;
 
-            if (waitingRecipeList.Count <= recipeItemsMax)
+            if (waitingRecipeList.Count < recipeItemsMax)
             {
                 RecipeSO recipeSO = recipeListSO.recipeList[Random.Range(0, recipeListSO.recipeList.Count)];
-                Debug.Log(recipeSO.recipeName);
+                Debug.Log("Recipe" + recipeSO.recipeName);
                 waitingRecipeList.Add(recipeSO);
+                OnRecipeSpawned?.Invoke(this, EventArgs.Empty);
             }
         }
     }
@@ -54,11 +58,17 @@ public class DeliveryManager : MonoBehaviour
                 {
                     Debug.Log("Player Delivered the correct Recipe!");
                     waitingRecipeList.RemoveAt(i);
+                    OnRecipeCompleted?.Invoke(this, EventArgs.Empty);
                     return;
                 }
             }
         }
 
         Debug.Log("Player did not deliver the right recipe!");
+    }
+
+    public List<RecipeSO> GetWaitingRecipeSOList()
+    {
+        return waitingRecipeList;
     }
 }
