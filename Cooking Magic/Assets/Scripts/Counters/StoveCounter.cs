@@ -44,10 +44,6 @@ public class StoveCounter : BaseCounter, IHasProgress
                     });
                     break;
                 case State.Frying:
-                    OnStateChanged?.Invoke(this, new OnStateChangedEventArgs
-                    {
-                        state = state
-                    });
                     OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs
                     {
                         cuttingProgressNormalized = fryingTime / fryingRecipeSO.fryingTimeMax
@@ -63,10 +59,6 @@ public class StoveCounter : BaseCounter, IHasProgress
                     }
                     break;
                 case State.Fried:
-                    OnStateChanged?.Invoke(this, new OnStateChangedEventArgs
-                    {
-                        state = state
-                    });
                     OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs
                     {
                         cuttingProgressNormalized = burningTime / burningRecipeSO.burningTimeMax
