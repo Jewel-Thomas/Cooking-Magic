@@ -4,7 +4,13 @@ using Random = UnityEngine.Random;
 
 public class SoundManager : MonoBehaviour
 {
+    public static SoundManager Instance { get; private set; }
     [SerializeField] private SoundEffsSO soundEffsSO;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     private void Start()
     {
@@ -55,13 +61,17 @@ public class SoundManager : MonoBehaviour
     private void PlaySound(AudioClip[] soundEffectArray, Vector3 position, float volume = 1.0f)
     {
         AudioClip soundEffect = soundEffectArray[Random.Range(0, soundEffectArray.Length)];
-        AudioSource.PlayClipAtPoint(soundEffect, position, volume);
+        PlaySound(soundEffect, position, volume);
     }
 
     private void PlaySound(AudioClip soundEffect, Vector3 position, float volume = 1.0f)
     {
         AudioSource.PlayClipAtPoint(soundEffect, position, volume);
     }
-    
+
+    public void PlayFootStepSound(Vector3 position, float volume)
+    {
+        PlaySound(soundEffsSO.footstep, position, volume);
+    }
 
 }
