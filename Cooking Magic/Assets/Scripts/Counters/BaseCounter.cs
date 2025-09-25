@@ -7,6 +7,12 @@ public class BaseCounter : MonoBehaviour, IKitchenObjectParent
     [SerializeField] private Transform counterTopPoint;
     private KitchenObject kitchenObject;
     public static event EventHandler OnAnyItemDropped;
+
+    public static void ResetStaticData()
+    {
+        OnAnyItemDropped = null;
+    }
+
     public virtual void Interact(Player player)
     {
         Debug.LogError("Illegal BaseCounter Interact() called!");
