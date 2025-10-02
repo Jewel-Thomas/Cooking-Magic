@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -20,6 +21,9 @@ public class OptionsUI : MonoBehaviour
     [SerializeField] private Button interactButton;
     [SerializeField] private Button interactAltButton;
     [SerializeField] private Button pauseButton;
+    [SerializeField] private Button gamepadInteractButton;
+    [SerializeField] private Button gamepadInteractAltButton;
+    [SerializeField] private Button gamepadPauseButton;
 
     [Space]
     [Header("Key Binding Button Texts")]
@@ -30,6 +34,9 @@ public class OptionsUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI interactButtonText;
     [SerializeField] private TextMeshProUGUI interactAltButtonText;
     [SerializeField] private TextMeshProUGUI pauseButtonText;
+    [SerializeField] private TextMeshProUGUI gamepadInteractButtonText;
+    [SerializeField] private TextMeshProUGUI gamepadInteractAltButtonText;
+    [SerializeField] private TextMeshProUGUI gamepadPauseButtonText;
 
     [Space]
     [Header("Key Binding Prompt Screen")]
@@ -39,6 +46,8 @@ public class OptionsUI : MonoBehaviour
     [Header("Main Options Texts")]
     [SerializeField] private TextMeshProUGUI sfxVolumeText;
     [SerializeField] private TextMeshProUGUI musicVolumeText;
+
+    private Action onOptionsClosed;
 
 
     private void Awake()
@@ -57,6 +66,7 @@ public class OptionsUI : MonoBehaviour
         });
         closeButton.onClick.AddListener(() => {
             Hide();
+            onOptionsClosed();
         });
 
         moveUpButton.onClick.AddListener(() =>
@@ -87,6 +97,18 @@ public class OptionsUI : MonoBehaviour
         {
             RebindBinding(GameInput.Binding.Pause);
         });
+        gamepadInteractButton.onClick.AddListener(() =>
+        {
+            RebindBinding(GameInput.Binding.Gamepad_Interact);
+        });
+        gamepadInteractAltButton.onClick.AddListener(() =>
+        {
+            RebindBinding(GameInput.Binding.Gamepad_InteractAlternate);
+        });
+        gamepadPauseButton.onClick.AddListener(() =>
+        {
+            RebindBinding(GameInput.Binding.Gamepad_Pause);
+        });
     }
 
     private void Start()
@@ -114,6 +136,9 @@ public class OptionsUI : MonoBehaviour
         interactButtonText.text = GameInput.Instance.GetBindingText(GameInput.Binding.Interact);
         interactAltButtonText.text = GameInput.Instance.GetBindingText(GameInput.Binding.InteractAlternate);
         pauseButtonText.text = GameInput.Instance.GetBindingText(GameInput.Binding.Pause);
+        gamepadInteractButtonText.text = GameInput.Instance.GetBindingText(GameInput.Binding.Gamepad_Interact);
+        gamepadInteractAltButtonText.text = GameInput.Instance.GetBindingText(GameInput.Binding.Gamepad_InteractAlternate);
+        gamepadPauseButtonText.text = GameInput.Instance.GetBindingText(GameInput.Binding.Gamepad_Pause);
     }
 
     public void Hide()
@@ -121,9 +146,11 @@ public class OptionsUI : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public void Show()
+    public void Show(Action onOptionsClosed)
     {
+        this.onOptionsClosed = onOptionsClosed;
         gameObject.SetActive(true);
+        sfxVolumeButton.Select();
     }
 
     public void HideRebindPromptScreen()

@@ -107,13 +107,13 @@ public class Player : MonoBehaviour, IKitchenObjectParent
         if (!canMove)
         {
             Vector3 moveDirX = new Vector3(inputVector.x, 0, 0).normalized;
-            canMove = moveDir.x != 0 && !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, moveDirX, moveDistance);
+            canMove = (moveDir.x < -0.5f || moveDir.x > 0.5f) && !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, moveDirX, moveDistance);
 
             if (canMove) moveDir = moveDirX;
             else
             {
                 Vector3 moveDirZ = new Vector3(0, 0, inputVector.y).normalized;
-                canMove = moveDir.z != 0 && !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, moveDirZ, moveDistance);
+                canMove = (moveDir.z < -0.5f || moveDir.z > 0.5f) && !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, moveDirZ, moveDistance);
 
                 if (canMove) moveDir = moveDirZ;
             }
