@@ -43,6 +43,7 @@ public class GameStartCountdownTimerUI : MonoBehaviour
         {
             previousCountDownNumber = countDownNumber;
             countDownAnimator.SetTrigger(COUNT_DOWN_ANIMATION_TRIGGER);
+            SoundManager.Instance.PlayCountDownSound();
         }
 
     }
