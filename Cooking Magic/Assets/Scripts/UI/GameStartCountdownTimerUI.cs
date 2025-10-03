@@ -4,7 +4,17 @@ using System;
 
 public class GameStartCountdownTimerUI : MonoBehaviour
 {
+    private const string COUNT_DOWN_ANIMATION_TRIGGER = "NumberPopup";
+
     [SerializeField] private TextMeshProUGUI gameStartCountDownTimerText;
+    private Animator countDownAnimator;
+
+    private int previousCountDownNumber;
+
+    private void Awake()
+    {
+        countDownAnimator = GetComponent<Animator>();
+    }
 
     private void Start()
     {
@@ -26,7 +36,15 @@ public class GameStartCountdownTimerUI : MonoBehaviour
 
     private void Update()
     {
-        gameStartCountDownTimerText.text = Mathf.Ceil(GameManager.Instance.GetGameCountdownStartTimer()).ToString();
+        int countDownNumber = Mathf.CeilToInt(GameManager.Instance.GetGameCountdownStartTimer());
+        gameStartCountDownTimerText.text = countDownNumber.ToString();
+
+        if(previousCountDownNumber != countDownNumber)
+        {
+            previousCountDownNumber = countDownNumber;
+            countDownAnimator.SetTrigger(COUNT_DOWN_ANIMATION_TRIGGER);
+        }
+
     }
 
     private void Show()

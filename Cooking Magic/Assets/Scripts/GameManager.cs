@@ -36,8 +36,11 @@ public class GameManager : MonoBehaviour
 
     private void GameInput_OnInteractAction(object sender, EventArgs e)
     {
-        state = State.CountDownToStart;
-        OnStateChanged?.Invoke(this, EventArgs.Empty);
+        if(state == State.WaitingToStart)
+        {
+            state = State.CountDownToStart;
+            OnStateChanged?.Invoke(this, EventArgs.Empty);
+        }
     }
 
     private void GameInput_OnPause(object sender, EventArgs e)
