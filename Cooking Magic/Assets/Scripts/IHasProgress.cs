@@ -7,6 +7,6 @@ public interface IHasProgress
     public event EventHandler<OnProgressChangedEventArgs> OnProgressChanged;
     public class OnProgressChangedEventArgs : EventArgs
     {
-        public float cuttingProgressNormalized;
+        public float progressNormalized;
     }
 }

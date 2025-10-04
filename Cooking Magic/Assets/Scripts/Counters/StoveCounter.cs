@@ -46,7 +46,7 @@ public class StoveCounter : BaseCounter, IHasProgress
                 case State.Frying:
                     OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs
                     {
-                        cuttingProgressNormalized = fryingTime / fryingRecipeSO.fryingTimeMax
+                        progressNormalized = fryingTime / fryingRecipeSO.fryingTimeMax
                     });
                     fryingTime += Time.deltaTime;
                     if (fryingTime >= fryingRecipeSO.fryingTimeMax)
@@ -61,7 +61,7 @@ public class StoveCounter : BaseCounter, IHasProgress
                 case State.Fried:
                     OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs
                     {
-                        cuttingProgressNormalized = burningTime / burningRecipeSO.burningTimeMax
+                        progressNormalized = burningTime / burningRecipeSO.burningTimeMax
                     });
                     burningTime += Time.deltaTime;
                     if (burningTime >= burningRecipeSO.burningTimeMax)
@@ -72,7 +72,7 @@ public class StoveCounter : BaseCounter, IHasProgress
                         state = State.Burned;
                         OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs
                         {
-                            cuttingProgressNormalized = 0f
+                            progressNormalized = 0f
                         });
                     }
                     break;
@@ -105,7 +105,7 @@ public class StoveCounter : BaseCounter, IHasProgress
                     });
                     OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs
                     {
-                        cuttingProgressNormalized = fryingTime / fryingRecipeSO.fryingTimeMax
+                        progressNormalized = fryingTime / fryingRecipeSO.fryingTimeMax
                     });
                 }
             }
@@ -131,7 +131,7 @@ public class StoveCounter : BaseCounter, IHasProgress
                         });
                         OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs
                         {
-                            cuttingProgressNormalized = 0f
+                            progressNormalized = 0f
                         });
                     }
                 }
@@ -146,7 +146,7 @@ public class StoveCounter : BaseCounter, IHasProgress
                 });
                 OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs
                 {
-                    cuttingProgressNormalized = 0f
+                    progressNormalized = 0f
                 });
             }
         }
@@ -200,5 +200,10 @@ public class StoveCounter : BaseCounter, IHasProgress
         }
 
         return null;
+    }
+
+    public bool isFried()
+    {
+        return state == State.Fried;
     }
 }
