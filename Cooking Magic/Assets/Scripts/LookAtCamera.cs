@@ -5,7 +5,7 @@ public class LookAtCamera : MonoBehaviour
     private enum Mode
     {
         LookAt,
-        LootAtInverted,
+        LookAtInverted,
         LookAtForward,
         LookAtForwardInverted
     }
@@ -18,7 +18,7 @@ public class LookAtCamera : MonoBehaviour
             case Mode.LookAt:
                 transform.LookAt(Camera.main.transform);
                 break;
-            case Mode.LootAtInverted:
+            case Mode.LookAtInverted:
                 Vector3 dirFromCamera = transform.position - Camera.main.transform.position;
                 transform.LookAt(transform.position + dirFromCamera);
                 break;
